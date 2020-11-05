@@ -1,0 +1,22 @@
+version: "2"
+
+services:
+  client:
+    image: node:latest             
+    command: sh -c 'echo "foo" && yarn add @vue/cli && yarn install && yarn run serve'
+    #command: sh -c 'echo "foo" && yarn install && yarn run start.dev'    
+    #environment:
+    #  - PORT=8080
+    working_dir: /opt/websockettest
+    volumes:
+      - ./websockettest:/opt/websockettest
+    ports:
+      - "4444:8080"
+  server:
+    image: node:latest              
+    command: sh -c 'ls -l && pwd  && yarn install && yarn run start.dev'
+    working_dir: /opt/server
+    volumes:
+      - ./server/:/opt/server  
+    ports:
+      - "3000:3000"
