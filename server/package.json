@@ -1,0 +1,78 @@
+{
+  "name": "Besucherliste",
+  "version": "0.0.1",
+  "description": "The server for Besucherliste",
+  "repository": "",
+  "license": "UNLICENSED",
+  "private": true,
+  "author": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "ava --serial --verbose"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "lodash-es": "^4.17.15",
+    "mysql": "^2.18.1",
+    "shortid": "^2.2.15",
+    "uuid": "^7.0.3",
+    "ws": "^7.2.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "ava": "^3.13.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-ava": "^10.2.0"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ]
+  },
+  "eslintConfig": {
+    "env": {
+      "es2020": true,
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "google"
+    ],
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module"
+    },
+    "plugins": [
+      "ava"
+    ],
+    "rules": {
+      "indent": [
+        "error",
+        4
+      ],
+      "object-curly-spacing": [
+        "error",
+        "always"
+      ],
+      "require-jsdoc": "off"
+    }
+  },
+  "ava": {
+    "nodeArguments": [
+      "--experimental-modules"
+    ]
+  }
+}
