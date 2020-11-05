@@ -34,8 +34,6 @@ class VisitorController {
             var v = new Visitor(_message.Surname, _message.Givenname, _message.Birthd );
 
             
-                        
-            
 /* 
             this.db.insertVisitor(_message, function(result){
                  console.log('newVisitor Result: ', result.affectedRows);
