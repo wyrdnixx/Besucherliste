@@ -1,19 +1,19 @@
-import mysql from 'mysql';
+import mysql from 'mysql-await';
 
 class DB {
 
- connection = {
+ dbcondata = {
     host: '127.0.0.1',
     user: 'mydb',
     password: 'mydb',
     database: 'mydb'
  };
 
- con = new mysql.createConnection(this.connection);
+ 
 
  constructor() {
 
-    
+
  }
 
 
@@ -41,17 +41,26 @@ class DB {
     })    
 } */
 
-insertVisitor(data){
+ async insertVisitor(data){
+ 
     
-    console.log('insertVisitor new Visitor: ', data.Surname);
+        /** Create connection pool using loaded config */
+        const connection = mysql.createConnection(this.dbcondata);
+       
+        connection.on(`error`, (err) => {
+          console.error(`Connection error ${err.code}`);
+        });
 
-    var sql = 'INSERT INTO `mydb`.`visitors` (`surname`, `givenname`, `birthd`) VALUES ("' + data.Surname + '", "' +data.Givenname + '", "' + data.Birthd + '");'
-    console.log("sql query: ", sql);
 
-    this.con.query(sql, function(err) {
-        
-        return results;
-    })    
+
+        var sql = 'INSERT INTO `mydb`.`visitors` (`surname`, `givenname`, `birthd`) VALUES ("' + data.Surname + '", "' +data.Givenname + '", "' + data.Birthd + '");'
+
+        let result =  await connection.awaitQuery(sql);
+        console.log("sql-Result: ", result);
+    
+    //con = new mysql.createConnection(this.connection);
+    
+    return result;
 }
 
 

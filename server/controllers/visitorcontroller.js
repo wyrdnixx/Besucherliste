@@ -26,7 +26,7 @@ class VisitorController {
 
        
 
-    newVisitor(_message) {
+    async newVisitor(_message) {
         
 
         if(_message.Surname != null && _message.Givenname != null && _message.Birthd != null) {
@@ -42,9 +42,9 @@ class VisitorController {
  */
 
 
-            var x = this.db.insertVisitor(_message);
-            
-            console.log(x);
+            const  x = await   this.db.insertVisitor(_message);
+            console.log("Status: ",x.affectedRows);
+                                 
 
         };
 
