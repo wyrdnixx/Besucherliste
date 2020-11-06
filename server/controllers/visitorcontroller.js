@@ -1,7 +1,7 @@
 import Visitor from '../models/visitor.js';
 import ReturnMessage from '../models/ReturnMessage.js';
 import DB from '../modules/db.js';
-//import { result } from 'lodash';
+
 
 class VisitorController {
 
@@ -24,43 +24,40 @@ class VisitorController {
             INFO:"Visitor created"}
         }; */
 
-       
+        rMSG = {
+            type:'',
+            data:{
+                INFO:''
+                }
+            };
 
     async newVisitor(_message) {
         
+          
 
         if(_message.Surname != null && _message.Givenname != null && _message.Birthd != null) {
 
-            var v = new Visitor(_message.Surname, _message.Givenname, _message.Birthd );
-
-            
-/* 
-            this.db.insertVisitor(_message, function(result){
-                 console.log('newVisitor Result: ', result.affectedRows);
-                 return  new ReturnMessage(0,"Visitor Created: ", result.affectedRows);
-             });
- */
-
-
             const  x = await   this.db.insertVisitor(_message);
             console.log("Status: ",x.affectedRows);
-                                 
-
-        };
-
-
-        //console.log("newVisitor Result:" , res);
-        
-             /* 
-            console.log(typeof v);
-            if( v === typeof Visitor) {
-
-                
-               return  new ReturnMessage(0,"Visitor Created");
-
-            } else return new ReturnMessage(1,"Visitor object could not be created");
             
-        } else return new ReturnMessage(1,"Invaild data supplied"); */
+            if (x.affectedRows != 1) {
+               //rMSG = await new ReturnMessage(1,"Visitor object could not be created");
+                this.rMSG.type = "Error";
+                this.rMSG.data.INFO = "Visitor not created";
+
+            } else {
+               //rMSG =  await new ReturnMessage(0,"Visitor Created"); 
+
+               this.rMSG.type = "Success";
+               this.rMSG.data.INFO = "Visitor created";
+
+            }
+            
+        };
+        console.log("--------->>>> ", this.rMSG);
+        return this.rMSG;
+//        return rMSG;
+    
 
 
         };            

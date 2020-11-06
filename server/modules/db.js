@@ -28,19 +28,6 @@ class DB {
  };
 
 
-/* insertVisitor(data,callback){
-    
-    console.log('insertVisitor new Visitor: ', data.Surname);
-
-    var sql = 'INSERT INTO `mydb`.`visitors` (`surname`, `givenname`, `birthd`) VALUES ("' + data.Surname + '", "' +data.Givenname + '", "' + data.Birthd + '");'
-    console.log("sql query: ", sql);
-
-    this.con.query(sql, function(err, results) {
-        if(err) return callback(err)
-        return callback(results);
-    })    
-} */
-
  async insertVisitor(data){
  
     

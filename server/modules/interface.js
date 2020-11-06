@@ -8,10 +8,10 @@ class Interface {
 
     
 
-       eventBus.on('NewVisitor', (clientId, message) =>{
+       eventBus.on('NewVisitor', async (clientId, message) =>{
            
         console.log("--> Create new Visitor: " + clientId, message);
-        this.visitorController.newVisitor(message);
+        let resr = await  this.visitorController.newVisitor(message);
                
         
        })
