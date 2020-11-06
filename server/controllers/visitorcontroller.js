@@ -31,10 +31,21 @@ class VisitorController {
                 }
             };
 
-    async newVisitor(_message) {
-        
-          
 
+async testfunc(_a){
+    console.log("--> a : ", _a);
+    this.rMSG.type = "Success";
+    this.rMSG.data.INFO = "Visitor created"
+    return this.rMSG;
+}
+
+    async newVisitor(_message) {
+
+
+        this.rMSG.type = "Success";
+        this.rMSG.data.INFO = "Visitor created";
+        return _message;
+        
         if(_message.Surname != null && _message.Givenname != null && _message.Birthd != null) {
 
             const  x = await   this.db.insertVisitor(_message);
@@ -56,10 +67,6 @@ class VisitorController {
         };
         console.log("--------->>>> ", this.rMSG);
         return this.rMSG;
-//        return rMSG;
-    
-
-
         };            
 }
 
