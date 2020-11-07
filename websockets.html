@@ -1,0 +1,92 @@
+<!-- websockets.html -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />        
+    </head>
+  <!--   <body onload = openConnection()> -->
+<input id="msgOK" type="text" />
+<button onclick="send(0)">Send</button>
+<br>
+<input id="msgER" type="text"/>
+<button onclick="send(1)">Send</button>
+<br>
+
+<pre id="output"></pre>
+<script>
+    var inputMsgOK = document.getElementById("msgOK");
+    var inputMsgER = document.getElementById("msgER");
+    var output = document.getElementById("output");
+    
+    var websocketServerLocation = "ws://localhost:8080/echo";
+
+    
+    
+    var socket = null;
+
+    var newVisitorObject = {
+        "type":"NewVisitor",
+        "data":{
+            "Surname":"Hans",
+            "Givenname":"Mueller",
+            "Birthd":"01.01.1990"
+        }
+        }
+    
+    var ErrObject ='"type":"Unknown","NotAvaiHans""Givenname":"Mueller","Birthd":"01.01.1990"'
+    
+
+        inputMsgOK.value = JSON.stringify(newVisitorObject);
+        inputMsgER.value = JSON.stringify(ErrObject);
+
+
+//var socket = new WebSocket(websocketServerLocation);
+
+
+   
+
+    function start() {
+        socket = null;
+        output.innerHTML += "Status: trying to connect... \n";
+        socket = new WebSocket(websocketServerLocation);
+        
+        
+        socket.onopen = function () {
+        output.innerHTML += "Status: Connected\n";
+    };
+    
+    socket.onmessage = function (e) {
+        output.innerHTML += "Server: " + e.data + "\n";
+    };
+
+    socket.onclose = function() {
+        output.innerHTML += "Status: Disconnected\n";
+
+        //setTimeout(function(){start()}, 5000);
+        this.socket = null;
+        setTimeout(function(){start()}, 5000);
+
+    }
+
+
+    }
+
+
+    function send(_msg) {
+        var toSend;
+        if (_msg == 0) {
+            toSend =  inputMsgOK.value            
+        }else {
+            toSend =  inputMsgER.value
+            
+        }   
+        socket.send(toSend);             
+        output.innerHTML += "send object: " + toSend + "\n";
+        
+    }
+
+start()
+</script>
+
+</body>
