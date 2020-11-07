@@ -15,6 +15,7 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
+// Test kommentar
 func main() {
 
 	modules.ReadConfig()
