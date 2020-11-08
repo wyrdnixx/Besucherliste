@@ -5,20 +5,29 @@
         <title>Test</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />        
     </head>
-  <!--   <body onload = openConnection()> -->
+   <body>
+       <div id="userinput">
+
+       
 <input id="msgOK" type="text" />
 <button onclick="send(0)">Send</button>
 <br>
 <input id="msgER" type="text"/>
 <button onclick="send(1)">Send</button>
 <br>
+</div>
 
+<div id="status">
+<button id="connState" disabled class="background-collor:green">test</button>
+</div>
 <pre id="output"></pre>
 <script>
     var inputMsgOK = document.getElementById("msgOK");
     var inputMsgER = document.getElementById("msgER");
     var output = document.getElementById("output");
-    
+    var info = document.getElementById("connState")
+
+
     var websocketServerLocation = "ws://localhost:8080/echo";
 
     
@@ -48,12 +57,14 @@
 
     function start() {
         socket = null;
-        output.innerHTML += "Status: trying to connect... \n";
+       // output.innerHTML += "Status: trying to connect... \n";
         socket = new WebSocket(websocketServerLocation);
         
         
         socket.onopen = function () {
-        output.innerHTML += "Status: Connected\n";
+        //output.innerHTML += "Status: Connected\n";
+        info.style.backgroundColor="lightgreen";
+        info.textContent="Connected...";
     };
     
     socket.onmessage = function (e) {
@@ -61,9 +72,11 @@
     };
 
     socket.onclose = function() {
-        output.innerHTML += "Status: Disconnected\n";
+        //output.innerHTML += "Status: Connection lost\n";
 
-        //setTimeout(function(){start()}, 5000);
+        info.style.backgroundColor="orange";
+        info.textContent="trying to reconect";
+
         this.socket = null;
         setTimeout(function(){start()}, 5000);
 

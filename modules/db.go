@@ -14,7 +14,7 @@ func testfunc() {
 
 	dbInfo := AppConfig.DBUser + ":" + AppConfig.DBPassword + "@tcp(" + AppConfig.DBHost + ":" + AppConfig.DBPort + ")/" + AppConfig.DBName
 
-	fmt.Printf(dbInfo)
+	fmt.Printf("Mysql-DB connection: %s\n", dbInfo)
 
 	db, err := sql.Open("mysql", dbInfo)
 
@@ -28,6 +28,8 @@ func testfunc() {
 	err2 := db.QueryRow("SELECT VERSION()").Scan(&version)
 
 	if err2 != nil {
+		fmt.Printf("Error-Mysql: %s\n", err2)
+
 		log.Fatal(err2)
 	}
 
