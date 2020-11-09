@@ -9,7 +9,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func testfunc() error {
+func testfunc() (string, error) {
 	fmt.Printf("Testfunktion")
 
 	dbInfo := AppConfig.DBUser + ":" + AppConfig.DBPassword + "@tcp(" + AppConfig.DBHost + ":" + AppConfig.DBPort + ")/" + AppConfig.DBName
@@ -29,10 +29,10 @@ func testfunc() error {
 
 	if err2 != nil {
 		fmt.Printf("Error-Mysql: %s\n", err2)
-		return err2
-		log.Fatal(err2)
+		return "", err2
+		//log.Fatal(err2)
 	}
 
 	fmt.Println(version)
-	return nil
+	return version, nil
 }
