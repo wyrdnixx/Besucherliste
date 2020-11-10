@@ -59,7 +59,8 @@
         socket = null;
        // output.innerHTML += "Status: trying to connect... \n";
         socket = new WebSocket(websocketServerLocation);
-        
+        info.style.backgroundColor="lightblue";
+
         
         socket.onopen = function () {
         //output.innerHTML += "Status: Connected\n";
@@ -78,7 +79,7 @@
         info.textContent="trying to reconect";
 
         this.socket = null;
-        setTimeout(function(){start()}, 5000);
+        setTimeout(function(){start()}, 3000);
 
     }
 
