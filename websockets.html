@@ -27,8 +27,8 @@
     var output = document.getElementById("output");
     var info = document.getElementById("connState")
 
-
-    var websocketServerLocation = "ws://localhost:8080/echo";
+   
+    var websocketServerLocation = "ws://" + window.location.hostname + ":8080/echo";
 
     
     
@@ -57,7 +57,7 @@
 
     function start() {
         socket = null;
-       // output.innerHTML += "Status: trying to connect... \n";
+        output.innerHTML += "Status: trying to connect... \n";
         socket = new WebSocket(websocketServerLocation);
         info.style.backgroundColor="lightblue";
 
