@@ -25,20 +25,19 @@ func testfunc(m models.MessageData) (string, error) {
 	}
 
 	var version string
-	type newVisitor struct {
+	type Visitor struct {
 		id        int
 		Surname   string
 		Givenname string
 		Birthd    string
 	}
-	var nv newVisitor
 
 	//err2 := db.QueryRow("SELECT VERSION()").Scan(&version)
 	var sql = "select * from Visitors;"
 	//var sql = "INSERT INTO `mydb`.`Visitors` (`Surname`, `Givenname`, `Bithd`) VALUES ('" + m.Surname + "', '" + m.Givenname + "', '" + m.Birthd + "');"
 
 	//	err2 := db.QueryRow(sql).Scan(&version)
-	err2 := db.QueryRow(sql).Scan(&nv)
+	results, err2 := db.Query(sql)
 
 	fmt.Printf("testfunc got: %s\n", m.Surname)
 
@@ -48,6 +47,19 @@ func testfunc(m models.MessageData) (string, error) {
 		//log.Fatal(err2)
 	}
 
-	fmt.Println(nv)
+	for results.Next() {
+		var v Visitor
+		err = results.Scan(&v.id, &v.Surname, &v.Givenname, &v.Birthd)
+		if err != nil {
+			fmt.Printf("Error on sql select: %s", err.Error())
+		} else {
+			log.Printf("SQL: %v;%s;%s;%s", v.id, v.Surname, v.Givenname, v.Birthd)
+			log.Printf("SQL: %v", v)
+			log.Printf("SQL: %+v", v)
+
+		}
+	}
+
+	//fmt.Println(nv)
 	return version, nil
 }
