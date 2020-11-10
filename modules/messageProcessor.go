@@ -25,7 +25,7 @@ func ConsumeMessage(_msg []byte) models.ResultMessage {
 		switch m.Type {
 		case "NewVisitor":
 			fmt.Printf("Request new Visitor created...\n")
-			res, err := testfunc()
+			res, err := testfunc(m.Data)
 			if err != nil {
 				result.Type = "Error"
 				result.Info = err.Error()

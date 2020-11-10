@@ -3,7 +3,7 @@ package models
 type MessageData struct {
 	Surname   string
 	Givenname string
-	Brithd    string
+	Birthd    string
 }
 type Message struct {
 	Type string
