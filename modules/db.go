@@ -33,7 +33,7 @@ func testfunc(m models.MessageData) (string, error) {
 	}
 
 	//err2 := db.QueryRow("SELECT VERSION()").Scan(&version)
-	var sql = "select * from Visitors;"
+	var sql = "select * from visitors;"
 	//var sql = "INSERT INTO `mydb`.`Visitors` (`Surname`, `Givenname`, `Bithd`) VALUES ('" + m.Surname + "', '" + m.Givenname + "', '" + m.Birthd + "');"
 
 	//	err2 := db.QueryRow(sql).Scan(&version)

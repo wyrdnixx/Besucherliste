@@ -29,6 +29,7 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	modules.ReadConfig()
 	flag.Parse()
 	hub := modules.NewHub()
 	go hub.Run()

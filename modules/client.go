@@ -73,7 +73,7 @@ func (c *Client) readPump() {
 
 		//c.hub.broadcast <- message
 
-		var x = InboundMessage{*c, message}
+		var x = transmitter{*c, message}
 
 		c.hub.incomming <- x
 		/* 	x := make(c, message)

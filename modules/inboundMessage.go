@@ -1,6 +1,6 @@
 package modules
 
-type InboundMessage struct {
+type transmitter struct {
 	Client  Client
 	Message []byte
 }

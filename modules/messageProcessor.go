@@ -7,10 +7,13 @@ import (
 	"github.com/wyrdnixx/Besucherliste/models"
 )
 
-func ConsumeMessage(_msg []byte) models.ResultMessage {
+func ConsumeMessage(_inbound transmitter) models.ResultMessage {
 
+	var _msg = _inbound.Message
 	var m models.Message
 	var result models.ResultMessage
+
+	//_inbound.Client.hub.broadcast <- []byte("BC-Message:")
 
 	err := json.Unmarshal(_msg, &m)
 	if err != nil {
@@ -32,7 +35,12 @@ func ConsumeMessage(_msg []byte) models.ResultMessage {
 			} else {
 				result.Type = "Success"
 				result.Info = "Visitor created result: " + res
+
 			}
+
+			//ToDo: currently stops processing
+			//bc(_inbound)
+
 			return result
 		default:
 			fmt.Printf("Unknown message type...\n")
@@ -43,4 +51,10 @@ func ConsumeMessage(_msg []byte) models.ResultMessage {
 
 	}
 
+}
+
+func bc(_inbound transmitter) {
+	fmt.Printf("in bc func\n")
+	_inbound.Client.hub.broadcast <- []byte("Holla BC")
+	fmt.Printf("end bc func\n")
 }
