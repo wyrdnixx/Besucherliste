@@ -71,7 +71,11 @@ func (c *Client) readPump() {
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
 
-		c.hub.broadcast <- message
+		//c.hub.broadcast <- message
+
+		var x = InboundMessage{*c, message}
+
+		c.hub.incomming <- x
 		/* 	x := make(c, message)
 		c.hub.broadcast <- x */
 	}
