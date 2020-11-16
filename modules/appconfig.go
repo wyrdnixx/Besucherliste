@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/tkanos/gonfig"
+	"github.com/wyrdnixx/Besucherliste/models"
 )
 
 // Configuration -  Allgemeine Config
@@ -17,6 +18,7 @@ type Configuration struct {
 	Info       string
 }
 
+// AppConfig Application Configurations
 var AppConfig = Configuration{}
 
 // ReadConfig Lies die Config aus der Config File aus
@@ -33,4 +35,8 @@ func ReadConfig() {
 
 	fmt.Println("Info: DBHost: ", AppConfig.DBHost)
 	fmt.Println("Info: DBPort: ", AppConfig.DBPort)
+
+	models.DBInfo = AppConfig.DBUser + ":" + AppConfig.DBPassword + "@tcp(" + AppConfig.DBHost + ":" + AppConfig.DBPort + ")/" + AppConfig.DBName
+	//DBInfo := AppConfig.DBUser + ":" + AppConfig.DBPassword + "@tcp(" + AppConfig.DBHost + ":" + AppConfig.DBPort + ")/" + AppConfig.DBName
+	fmt.Printf("got DBInfo: %s", models.DBInfo)
 }

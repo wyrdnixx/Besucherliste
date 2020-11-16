@@ -2,7 +2,6 @@ package modules
 
 import (
 	"database/sql"
-	_ "database/sql"
 	"fmt"
 	"log"
 
@@ -10,9 +9,15 @@ import (
 	"github.com/wyrdnixx/Besucherliste/models"
 )
 
+func InsertVisitor(m models.MessageData) (string, error) {
+	fmt.Printf("InsertVisitor")
+	fmt.Printf("Database Connection parameters: %s ", models.DBInfo)
+
+	return "", nil
+}
+
 func testfunc(m models.MessageData) (string, error) {
 	fmt.Printf("Testfunktion")
-
 	dbInfo := AppConfig.DBUser + ":" + AppConfig.DBPassword + "@tcp(" + AppConfig.DBHost + ":" + AppConfig.DBPort + ")/" + AppConfig.DBName
 
 	fmt.Printf("Mysql-DB connection: %s\n", dbInfo)
@@ -24,13 +29,14 @@ func testfunc(m models.MessageData) (string, error) {
 		log.Fatal(err)
 	}
 
+	//TESTS
 	var version string
-	type Visitor struct {
+	/* 	type Visitor struct {
 		id        int
 		Surname   string
 		Givenname string
 		Birthd    string
-	}
+	} */
 
 	//err2 := db.QueryRow("SELECT VERSION()").Scan(&version)
 	var sql = "select * from visitors;"
@@ -48,12 +54,12 @@ func testfunc(m models.MessageData) (string, error) {
 	}
 
 	for results.Next() {
-		var v Visitor
-		err = results.Scan(&v.id, &v.Surname, &v.Givenname, &v.Birthd)
+		var v models.Visitor
+		err = results.Scan(&v.Id, &v.Surname, &v.Givenname, &v.Birthd)
 		if err != nil {
 			fmt.Printf("Error on sql select: %s", err.Error())
 		} else {
-			log.Printf("SQL: %v;%s;%s;%s", v.id, v.Surname, v.Givenname, v.Birthd)
+			log.Printf("SQL: %v;%s;%s;%s", v.Id, v.Surname, v.Givenname, v.Birthd)
 			log.Printf("SQL: %v", v)
 			log.Printf("SQL: %+v", v)
 

@@ -7,6 +7,7 @@ import (
 	"github.com/wyrdnixx/Besucherliste/models"
 )
 
+// ConsumeMessage : getting inbound message and processing
 func ConsumeMessage(_inbound transmitter) models.ResultMessage {
 
 	var _msg = _inbound.Message
@@ -28,7 +29,9 @@ func ConsumeMessage(_inbound transmitter) models.ResultMessage {
 		switch m.Type {
 		case "NewVisitor":
 			fmt.Printf("Request new Visitor created...\n")
-			res, err := testfunc(m.Data)
+			// 			res, err := testfunc(m.Data)
+			res, err := InsertVisitor(m.Data)
+
 			if err != nil {
 				result.Type = "Error"
 				result.Info = err.Error()
