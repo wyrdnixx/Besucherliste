@@ -33,6 +33,30 @@ func InsertVisitor(m models.MessageData) (string, error) {
 	return "Success", nil
 }
 
+func UpdateVisitor(m models.MessageData) (string, error) {
+	fmt.Printf("UpdateVisitor")
+	fmt.Printf("Database Connection parameters: %s \n", models.DBInfo)
+
+	db, err := sql.Open("mysql", models.DBInfo)
+
+	defer db.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var sql = "UPDATE `mydb`.`visitors` SET `Surname` = '" + m.Surname + "', `Givenname` = '" + m.Givenname + "', `Birthd` = '" + m.Birthd + "', `chd`= NOW() WHERE (ìd`= '" + m.Id + "');"
+
+	result, err := db.Query(sql)
+
+	if err != nil {
+		fmt.Printf("Error-Mysql: %s\n", err)
+		return "", err
+		//log.Fatal(err2)
+	}
+	fmt.Printf("Insert sucessfully id: %s \n", result)
+	return "Success", nil
+}
+
 func testfunc(m models.MessageData) (string, error) {
 	fmt.Printf("Testfunktion")
 	dbInfo := AppConfig.DBUser + ":" + AppConfig.DBPassword + "@tcp(" + AppConfig.DBHost + ":" + AppConfig.DBPort + ")/" + AppConfig.DBName
