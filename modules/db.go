@@ -20,7 +20,7 @@ func InsertVisitor(m models.MessageData) (string, error) {
 		log.Fatal(err)
 	}
 
-	var sql = "INSERT INTO `mydb`.`visitors` (`Surname`, `Givenname`, `Birthd`) VALUES ('" + m.Surname + "', '" + m.Givenname + "', '" + m.Birthd + "');"
+	var sql = "INSERT INTO `mydb`.`visitors` (`Surname`, `Givenname`, `Birthd`, `chd`) VALUES ('" + m.Surname + "', '" + m.Givenname + "', '" + m.Birthd + "', NOW() );"
 
 	result, err := db.Query(sql)
 
