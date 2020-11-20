@@ -11,9 +11,26 @@ import (
 
 func InsertVisitor(m models.MessageData) (string, error) {
 	fmt.Printf("InsertVisitor")
-	fmt.Printf("Database Connection parameters: %s ", models.DBInfo)
+	fmt.Printf("Database Connection parameters: %s \n", models.DBInfo)
 
-	return "", nil
+	db, err := sql.Open("mysql", models.DBInfo)
+
+	defer db.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var sql = "INSERT INTO `mydb`.`visitors` (`Surname`, `Givenname`, `Birthd`) VALUES ('" + m.Surname + "', '" + m.Givenname + "', '" + m.Birthd + "');"
+
+	result, err := db.Query(sql)
+
+	if err != nil {
+		fmt.Printf("Error-Mysql: %s\n", err)
+		return "", err
+		//log.Fatal(err2)
+	}
+	fmt.Printf("Insert sucessfully id: %s \n", result)
+	return "Success", nil
 }
 
 func testfunc(m models.MessageData) (string, error) {
