@@ -44,10 +44,8 @@ func UpdateVisitor(m models.ReqUpdVisitor) (string, error) {
 		log.Fatal(err)
 	}
 
-	var sqltest = "UPDATE `mydb`.`visitors` SET `Surname` = '" + m.Surname + "', `Givenname` = '" + m.Givenname + "', `Birthd` = '" + m.Birthd + "', `chd`= NOW() WHERE (`id` = '3');"
-	var sql = "UPDATE `mydb`.`visitors` SET `Surname` = '" + m.Surname + "', `Givenname` = '" + m.Givenname + "', `Birthd` = '" + m.Birthd + "', `chd`= NOW() WHERE (`ìd` = '" + m.ID + "');"
+	var sql = "UPDATE `mydb`.`visitors` SET `Surname` = '" + m.Surname + "', `Givenname` = '" + m.Givenname + "', `Birthd` = '" + m.Birthd + "', `chd`= NOW() WHERE (`id` = '" + m.ID + "');"
 	fmt.Printf("SQL: %s \n", sql)
-	fmt.Printf("SQL: %s \n", sqltest)
 
 	result, err := db.Query(sql)
 
