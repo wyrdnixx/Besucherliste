@@ -4,12 +4,13 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/wyrdnixx/Besucherliste/models"
 )
 
-func InsertVisitor(m models.ReqNewVisitor) (string, error) {
+func InsertVisitor(m models.ReqNewVisitor) (int64, error) {
 	fmt.Printf("InsertVisitor")
 	fmt.Printf("Database Connection parameters: %s \n", models.DBInfo)
 
@@ -22,15 +23,17 @@ func InsertVisitor(m models.ReqNewVisitor) (string, error) {
 
 	var sql = "INSERT INTO `mydb`.`visitors` (`Surname`, `Givenname`, `Birthd`, `chd`) VALUES ('" + m.Surname + "', '" + m.Givenname + "', '" + m.Birthd + "', NOW() );"
 
-	result, err := db.Query(sql)
+	result, err := db.Exec(sql)
 
 	if err != nil {
 		fmt.Printf("Error-Mysql: %s\n", err)
-		return "", err
+		return -1, err
 		//log.Fatal(err2)
 	}
 	fmt.Printf("Insert sucessfully id: %s \n", result)
-	return "Success", nil
+	id, _ := result.LastInsertId()
+	fmt.Printf("Insert sucessfully id: %v \n", id)
+	return id, nil
 }
 
 func UpdateVisitor(m models.ReqUpdVisitor) (string, error) {
@@ -47,67 +50,48 @@ func UpdateVisitor(m models.ReqUpdVisitor) (string, error) {
 	var sql = "UPDATE `mydb`.`visitors` SET `Surname` = '" + m.Surname + "', `Givenname` = '" + m.Givenname + "', `Birthd` = '" + m.Birthd + "', `chd`= NOW() WHERE (`id` = '" + m.ID + "');"
 	fmt.Printf("SQL: %s \n", sql)
 
-	result, err := db.Query(sql)
+	//result, err := db.Query(sql)
+	result, err := db.Exec(sql)
 
 	if err != nil {
 		fmt.Printf("Error-Mysql: %s\n", err)
 		return "", err
 		//log.Fatal(err2)
 	}
-	fmt.Printf("Insert sucessfully id: %s \n", result)
+	fmt.Printf("Udpate Result: %v", result)
 	return "Success", nil
 }
 
-func testfunc(m models.MessageData) (string, error) {
-	fmt.Printf("Testfunktion")
-	dbInfo := AppConfig.DBUser + ":" + AppConfig.DBPassword + "@tcp(" + AppConfig.DBHost + ":" + AppConfig.DBPort + ")/" + AppConfig.DBName
+func GetVisitorById(_i int64) (models.Visitor, error) {
 
-	fmt.Printf("Mysql-DB connection: %s\n", dbInfo)
-
-	db, err := sql.Open("mysql", dbInfo)
+	db, err := sql.Open("mysql", models.DBInfo)
+	var v models.Visitor
 
 	defer db.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
+	i := strconv.FormatInt(_i, 10)
 
-	//TESTS
-	var version string
-	/* 	type Visitor struct {
-		id        int
-		Surname   string
-		Givenname string
-		Birthd    string
-	} */
+	var sql = "select * from mydb.visitors where id = " + i + ";"
+	fmt.Printf("SQL: %s \n", sql)
+	result, err := db.Query(sql)
 
-	//err2 := db.QueryRow("SELECT VERSION()").Scan(&version)
-	var sql = "select * from visitors;"
-	//var sql = "INSERT INTO `mydb`.`Visitors` (`Surname`, `Givenname`, `Bithd`) VALUES ('" + m.Surname + "', '" + m.Givenname + "', '" + m.Birthd + "');"
-
-	//	err2 := db.QueryRow(sql).Scan(&version)
-	results, err2 := db.Query(sql)
-
-	fmt.Printf("testfunc got: %s\n", m.Surname)
-
-	if err2 != nil {
-		fmt.Printf("Error-Mysql: %s\n", err2)
-		return "", err2
-		//log.Fatal(err2)
+	if err != nil {
+		fmt.Printf("Error-Mysql: %s\n", err)
+		return v, err
 	}
+	for result.Next() {
 
-	for results.Next() {
-		var v models.Visitor
-		err = results.Scan(&v.Id, &v.Surname, &v.Givenname, &v.Birthd)
+		err = result.Scan(&v.ID, &v.Surname, &v.Givenname, &v.Birthd, &v.Chd)
 		if err != nil {
-			fmt.Printf("Error on sql select: %s", err.Error())
+			fmt.Printf("Error getting visitor: %s \n", err.Error())
+
 		} else {
-			log.Printf("SQL: %v;%s;%s;%s", v.Id, v.Surname, v.Givenname, v.Birthd)
-			log.Printf("SQL: %v", v)
-			log.Printf("SQL: %+v", v)
+			fmt.Printf("Found visitor: %s \n", v.Surname)
 
 		}
 	}
 
-	//fmt.Println(nv)
-	return version, nil
+	return v, nil
 }

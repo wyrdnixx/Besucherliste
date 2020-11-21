@@ -37,11 +37,11 @@ type ResultMessage struct {
 }
 
 type Visitor struct {
-	Id        int
+	ID        int
 	Surname   string
 	Givenname string
 	Birthd    string
-	chd       string
+	Chd       string
 }
 
 // DBInfo : Database connection info

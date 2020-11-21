@@ -3,6 +3,7 @@ package modules
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	"github.com/wyrdnixx/Besucherliste/models"
 )
@@ -30,11 +31,18 @@ func ConsumeMessage(_inbound transmitter) models.ResultMessage {
 		switch m.Type {
 		case "NewVisitor":
 			fmt.Printf("NewVisitor requested\n")
-			result = processRewNewVisitor(m.Data)
+			result = processReqNewVisitor(m.Data, _inbound)
 
 		case "UpdateVisitor":
 			fmt.Printf("UpdateVisitor requested\n")
 			result = processUpdateVisitor(m.Data)
+
+			// Send Broadcast to all Clients
+			var updateInfo models.ResultMessage
+			updateInfo.Type = "VisitorUpdate"
+			//updateInfo.Info = m.Data
+			//go bc(_inbound, updateInfo)
+
 		}
 
 		return result
@@ -42,7 +50,7 @@ func ConsumeMessage(_inbound transmitter) models.ResultMessage {
 
 }
 
-func processRewNewVisitor(_m interface{}) models.ResultMessage {
+func processReqNewVisitor(_m interface{}, _inboud transmitter) models.ResultMessage {
 	var nv models.ReqNewVisitor
 	var result models.ResultMessage
 
@@ -62,7 +70,17 @@ func processRewNewVisitor(_m interface{}) models.ResultMessage {
 			result.Info = err.Error()
 		} else {
 			result.Type = "Success"
-			result.Info = "Visitor created result: " + res
+			i := strconv.FormatInt(res, 10)
+			result.Info = i
+
+			// Test get visitor by ID
+			v, err := GetVisitorById(res)
+			if err != nil {
+			} else {
+				fmt.Printf("Inserted Result: %s", v)
+				go bc(_inboud, v)
+			}
+
 		}
 	}
 
@@ -95,56 +113,10 @@ func processUpdateVisitor(_m interface{}) models.ResultMessage {
 	return result
 }
 
-// ConsumeMessageBAK : getting inbound message and processing
-func ConsumeMessageBAK(_inbound transmitter) models.ResultMessage {
-
-	var _msg = _inbound.Message
-	var m models.Message
-	var result models.ResultMessage
-
-	//_inbound.Client.hub.broadcast <- []byte("BC-Message:")
-
-	err := json.Unmarshal(_msg, &m)
-	if err != nil {
-		fmt.Printf("Error decoding: %s\n", err.Error())
-
-		result.Type = "Error"
-		result.Info = err.Error()
-		return result
-	} else {
-		fmt.Printf("got message type: %s\n", m.Type)
-
-		switch m.Type {
-		case "NewVisitor":
-			fmt.Printf("Request new Visitor created...\n")
-			/* 			res, err := InsertVisitor(m.Data)
-
-			   			if err != nil {
-			   				result.Type = "Error"
-			   				result.Info = err.Error()
-			   			} else {
-			   				result.Type = "Success"
-			   				result.Info = "Visitor created result: " + res
-
-			   			} */
-
-			//ToDo: currently stops processing
-			//bc(_inbound)
-
-			return result
-		default:
-			fmt.Printf("Unknown message type...\n")
-			result.Type = "Error"
-			result.Info = "Unknown message type: " + m.Type
-			return result
-		}
-
-	}
-
-}
-
-func bc(_inbound transmitter) {
+func bc(_inbound transmitter, _data models.Visitor) {
 	fmt.Printf("in bc func\n")
-	_inbound.Client.hub.broadcast <- []byte("Holla BC")
+	var x, _ = json.Marshal(_data)
+	//_inbound.Client.hub.broadcast <- []byte(_data)
+	_inbound.Client.hub.broadcast <- x
 	fmt.Printf("end bc func\n")
 }
