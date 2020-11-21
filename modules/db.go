@@ -9,7 +9,7 @@ import (
 	"github.com/wyrdnixx/Besucherliste/models"
 )
 
-func InsertVisitor(m models.MessageData) (string, error) {
+func InsertVisitor(m models.ReqNewVisitor) (string, error) {
 	fmt.Printf("InsertVisitor")
 	fmt.Printf("Database Connection parameters: %s \n", models.DBInfo)
 
@@ -33,7 +33,7 @@ func InsertVisitor(m models.MessageData) (string, error) {
 	return "Success", nil
 }
 
-func UpdateVisitor(m models.MessageData) (string, error) {
+func UpdateVisitor(m models.ReqUpdVisitor) (string, error) {
 	fmt.Printf("UpdateVisitor")
 	fmt.Printf("Database Connection parameters: %s \n", models.DBInfo)
 
@@ -44,7 +44,10 @@ func UpdateVisitor(m models.MessageData) (string, error) {
 		log.Fatal(err)
 	}
 
-	var sql = "UPDATE `mydb`.`visitors` SET `Surname` = '" + m.Surname + "', `Givenname` = '" + m.Givenname + "', `Birthd` = '" + m.Birthd + "', `chd`= NOW() WHERE (ìd`= '" + m.Id + "');"
+	var sqltest = "UPDATE `mydb`.`visitors` SET `Surname` = '" + m.Surname + "', `Givenname` = '" + m.Givenname + "', `Birthd` = '" + m.Birthd + "', `chd`= NOW() WHERE (`id` = '3');"
+	var sql = "UPDATE `mydb`.`visitors` SET `Surname` = '" + m.Surname + "', `Givenname` = '" + m.Givenname + "', `Birthd` = '" + m.Birthd + "', `chd`= NOW() WHERE (`ìd` = '" + m.ID + "');"
+	fmt.Printf("SQL: %s \n", sql)
+	fmt.Printf("SQL: %s \n", sqltest)
 
 	result, err := db.Query(sql)
 
