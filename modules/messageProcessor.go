@@ -3,7 +3,6 @@ package modules
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
 
 	"github.com/wyrdnixx/Besucherliste/models"
 )
@@ -35,7 +34,7 @@ func ConsumeMessage(_inbound transmitter) models.ResultMessage {
 
 		case "UpdateVisitor":
 			fmt.Printf("UpdateVisitor requested\n")
-			result = processUpdateVisitor(m.Data)
+			result = processUpdateVisitor(m.Data, _inbound)
 
 			// Send Broadcast to all Clients
 			var updateInfo models.ResultMessage
@@ -70,7 +69,8 @@ func processReqNewVisitor(_m interface{}, _inboud transmitter) models.ResultMess
 			result.Info = err.Error()
 		} else {
 			result.Type = "Success"
-			i := strconv.FormatInt(res, 10)
+			//i := strconv.FormatInt(res, 10)
+			i := string(res)
 			result.Info = i
 
 			// Test get visitor by ID
@@ -87,7 +87,7 @@ func processReqNewVisitor(_m interface{}, _inboud transmitter) models.ResultMess
 	return result
 }
 
-func processUpdateVisitor(_m interface{}) models.ResultMessage {
+func processUpdateVisitor(_m interface{}, _inbound transmitter) models.ResultMessage {
 	var uv models.ReqUpdVisitor
 	var result models.ResultMessage
 
@@ -100,13 +100,20 @@ func processUpdateVisitor(_m interface{}) models.ResultMessage {
 		result.Type = "Error"
 		result.Info = err.Error()
 	} else {
-		res, err := UpdateVisitor(uv)
+		updId, err := UpdateVisitor(uv)
 		if err != nil {
 			result.Type = "Error"
 			result.Info = err.Error()
 		} else {
 			result.Type = "Success"
-			result.Info = "Update Visitor result: " + res
+			result.Info = "Visitor updated"
+			v, err := GetVisitorById(updId)
+			if err != nil {
+				fmt.Printf("Error getting visitor by id: %v\n", updId)
+			} else {
+				go bc(_inbound, v)
+			}
+
 		}
 	}
 

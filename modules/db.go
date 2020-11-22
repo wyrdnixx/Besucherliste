@@ -10,7 +10,7 @@ import (
 	"github.com/wyrdnixx/Besucherliste/models"
 )
 
-func InsertVisitor(m models.ReqNewVisitor) (int64, error) {
+func InsertVisitor(m models.ReqNewVisitor) (int, error) {
 	fmt.Printf("InsertVisitor")
 	fmt.Printf("Database Connection parameters: %s \n", models.DBInfo)
 
@@ -31,12 +31,13 @@ func InsertVisitor(m models.ReqNewVisitor) (int64, error) {
 		//log.Fatal(err2)
 	}
 	fmt.Printf("Insert sucessfully id: %s \n", result)
-	id, _ := result.LastInsertId()
+	x, _ := result.LastInsertId()
+	id := int(x)
 	fmt.Printf("Insert sucessfully id: %v \n", id)
 	return id, nil
 }
 
-func UpdateVisitor(m models.ReqUpdVisitor) (string, error) {
+func UpdateVisitor(m models.ReqUpdVisitor) (int, error) {
 	fmt.Printf("UpdateVisitor")
 	fmt.Printf("Database Connection parameters: %s \n", models.DBInfo)
 
@@ -55,14 +56,23 @@ func UpdateVisitor(m models.ReqUpdVisitor) (string, error) {
 
 	if err != nil {
 		fmt.Printf("Error-Mysql: %s\n", err)
-		return "", err
+		return -1, err
 		//log.Fatal(err2)
 	}
 	fmt.Printf("Udpate Result: %v", result)
-	return "Success", nil
+
+	if id, err := strconv.Atoi(m.ID); err == nil {
+		return id, nil
+
+	} else {
+		fmt.Println(m.ID, "is not an integer.")
+		return -1, nil
+
+	}
+
 }
 
-func GetVisitorById(_i int64) (models.Visitor, error) {
+func GetVisitorById(_i int) (models.Visitor, error) {
 
 	db, err := sql.Open("mysql", models.DBInfo)
 	var v models.Visitor
@@ -71,7 +81,7 @@ func GetVisitorById(_i int64) (models.Visitor, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	i := strconv.FormatInt(_i, 10)
+	i := strconv.Itoa(_i)
 
 	var sql = "select * from mydb.visitors where id = " + i + ";"
 	fmt.Printf("SQL: %s \n", sql)
