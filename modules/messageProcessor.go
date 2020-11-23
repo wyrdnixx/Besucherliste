@@ -24,8 +24,8 @@ func ConsumeMessage(_inbound transmitter) models.ResultMessage {
 
 		fmt.Printf("got message type: %s\n", m.Type)
 		fmt.Printf("got message data: %s\n", m.Data)
-		result.Type = "Success"
-		result.Info = "Message unmarshall successfull: "
+		//result.Type = "Success"
+		//result.Info = "Message unmarshall successfull: "
 
 		switch m.Type {
 		case "NewVisitor":
@@ -39,9 +39,12 @@ func ConsumeMessage(_inbound transmitter) models.ResultMessage {
 			// Send Broadcast to all Clients
 			var updateInfo models.ResultMessage
 			updateInfo.Type = "VisitorUpdate"
-			//updateInfo.Info = m.Data
-			//go bc(_inbound, updateInfo)
+		//updateInfo.Info = m.Data
+		//go bc(_inbound, updateInfo)
 
+		default:
+			result.Type = "Error"
+			result.Info = "Unknown Message Type: " + m.Type
 		}
 
 		return result
