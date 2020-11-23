@@ -105,3 +105,35 @@ func GetVisitorById(_i int) (models.Visitor, error) {
 
 	return v, nil
 }
+
+func GetAllVisitors() (models.AllVisitors, error) {
+	db, err := sql.Open("mysql", models.DBInfo)
+	var visitors models.AllVisitors
+
+	defer db.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var sql = "select * from mydb.visitors ;"
+	fmt.Printf("SQL: %s \n", sql)
+	result, err := db.Query(sql)
+
+	if err != nil {
+		fmt.Printf("Error-Mysql: %s\n", err)
+		return visitors, err
+	}
+	for result.Next() {
+		var v models.Visitor
+		err = result.Scan(&v.ID, &v.Surname, &v.Givenname, &v.Birthd, &v.Chd)
+		if err != nil {
+			fmt.Printf("Error getting visitor: %s \n", err.Error())
+
+		} else {
+			fmt.Printf("Found visitor: %s \n", v.Surname)
+			//visitors.Visitor = append(v)
+		}
+	}
+
+	return visitors, nil
+}

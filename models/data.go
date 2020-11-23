@@ -36,6 +36,10 @@ type ResultMessage struct {
 	Info string
 }
 
+type AllVisitors struct {
+	Visitor []Visitor `json:"data"`
+}
+
 type Visitor struct {
 	ID        int
 	Surname   string
