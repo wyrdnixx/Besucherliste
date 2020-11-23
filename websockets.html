@@ -3,27 +3,70 @@
 <html>
     <head>
         <title>Test</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />        
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />    
+        
+        <style>
+ #container {
+    border: 3px solid orange;
+    margin: 10px 0 0 10px;
+    width:100%;
+    float: left;
+}
+
+
+#userinput { 
+    float: left; 
+    width: 15em; 
+    height: 15em; 
+    background-color: pink; 
+    }
+#pdatedata  { float: right; 
+    width: 12.5em; 
+    height: 12.5em; 
+    background-color: lightblue; 
+}
+#status  {
+    float: both;
+    width: 10em; 
+    height: 10em; 
+    background-color: lightgreen; 
+ }
+
+
+            </style>
+
     </head>
    <body>
-       <div id="userinput">
+
+<div  id="container" class="container" >   
+
+    <div id="userinput"  class="userinput">
 
        
-<input id="msgOK" type="text" />
-<button onclick="send(0)">Send</button>
-<br>
-<input id="msgER" type="text"/>
-<button onclick="send(1)">Send</button>
-<br>
-<input id="msgUPD" type="text"/>
-<button onclick="send(2)">Send</button>
-<br>
+        <input id="msgOK" type="text" />
+        <button onclick="send(0)">Send</button>
+        <br>
+        <input id="msgER" type="text"/>
+        <button onclick="send(1)">Send</button>
+        <br>
+        <input id="msgUPD" type="text"/>
+        <button onclick="send(2)">Send</button>
+        <br>
+    </div>
+
+    <div id="updatedata"    class="updatedata">
+            <button onclick="updateData()">manual Update Data</button>
+            <br>
+    </div>
+    <div id="status">
+        <button id="connState" disabled class="background-collor:green">test</button>
+        <pre id="output"></pre>
+    </div>
 </div>
 
-<div id="status">
-<button id="connState" disabled class="background-collor:green">test</button>
-</div>
-<pre id="output"></pre>
+
+
+
 <script>
     var inputMsgOK = document.getElementById("msgOK");
     var inputMsgER = document.getElementById("msgER");
@@ -67,9 +110,6 @@
         inputMsgUPD.value = JSON.stringify(updateVisitorObject);
 
 
-  /*   var getAllVisitors = {
-        "type":"getAllVisitors"     
-    } */
     
 
    
@@ -120,6 +160,20 @@
         socket.send(toSend);             
         output.innerHTML += "send object: " + toSend + "\n";
         
+    }
+
+    function updateData() {
+
+        var updateRequest = {
+        "type":"updateRequest",
+        "data":{
+            "updateRequest":"AllVisitors"
+            }
+        }
+
+        socket.send(JSON.stringify(updateRequest));
+        output.innerHTML+="Requested AllVisitors update: " + updateRequest + "\n"
+
     }
 
 start()
