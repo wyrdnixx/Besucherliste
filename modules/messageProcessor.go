@@ -49,7 +49,7 @@ func ConsumeMessage(_inbound transmitter) models.ResultMessage {
 			}
 			fmt.Printf("all visitors: %v\n", res)
 			result.Type = "UpdateAllVisitors"
-			nfo, _ := json.Marshal(res)
+			nfo, _ := json.Marshal(res.Visitors)
 			result.Info = string(nfo)
 		default:
 			result.Type = "Error"

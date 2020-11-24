@@ -129,6 +129,18 @@
     
     socket.onmessage = function (e) {
         output.innerHTML += "Server: " + e.data + "\n";
+        var obj = JSON.parse( e.data)
+        if (obj.Type === "UpdateAllVisitors") {
+            output.innerHTML += "UpdateAllVisitors JSON OK\n";
+            //output.innerHTML += obj.Info
+            var Info = JSON.parse(obj.Info)
+
+            for (var v of Info) {
+                output.innerHTML +=  v.ID + " : " + v.Surname + "\n";
+            }
+        } else {
+            output.innerHTML += "Leider nein " + obj + " \n";
+        }
     };
 
     socket.onclose = function() {
