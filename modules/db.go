@@ -107,8 +107,11 @@ func GetVisitorById(_i int) (models.Visitor, error) {
 }
 
 func GetAllVisitors() (models.AllVisitors, error) {
+	// func GetAllVisitors() {
 	db, err := sql.Open("mysql", models.DBInfo)
-	var visitors models.AllVisitors
+	var allVisitors models.AllVisitors
+
+	fmt.Printf("AllV: %v \n", allVisitors)
 
 	defer db.Close()
 	if err != nil {
@@ -121,7 +124,7 @@ func GetAllVisitors() (models.AllVisitors, error) {
 
 	if err != nil {
 		fmt.Printf("Error-Mysql: %s\n", err)
-		return visitors, err
+		return allVisitors, err
 	}
 	for result.Next() {
 		var v models.Visitor
@@ -130,10 +133,13 @@ func GetAllVisitors() (models.AllVisitors, error) {
 			fmt.Printf("Error getting visitor: %s \n", err.Error())
 
 		} else {
-			fmt.Printf("Found visitor: %s \n", v.Surname)
+			//fmt.Printf("Found visitor: %v:%s \n", v.ID, v.Surname)
+			allVisitors.Visitors = append(allVisitors.Visitors, v)
 			//visitors.Visitor = append(v)
 		}
 	}
 
-	return visitors, nil
+	//fmt.Printf("AllV: %v \n", allVisitors)
+
+	return allVisitors, nil
 }

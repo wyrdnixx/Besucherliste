@@ -43,9 +43,14 @@ func ConsumeMessage(_inbound transmitter) models.ResultMessage {
 		//go bc(_inbound, updateInfo)
 
 		case "updateRequest":
-			err, result := GetAllVisitors()
-			fmt.Printf("all visitors: %v\n", result)
-
+			res, err := GetAllVisitors()
+			if err != nil {
+				fmt.Printf("Error getting AllVisitors:  %v \n ", err.Error())
+			}
+			fmt.Printf("all visitors: %v\n", res)
+			result.Type = "UpdateAllVisitors"
+			nfo, _ := json.Marshal(res)
+			result.Info = string(nfo)
 		default:
 			result.Type = "Error"
 			result.Info = "Unknown Message Type: " + m.Type

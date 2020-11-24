@@ -37,7 +37,7 @@ type ResultMessage struct {
 }
 
 type AllVisitors struct {
-	Visitor []Visitor `json:"data"`
+	Visitors []Visitor
 }
 
 type Visitor struct {
