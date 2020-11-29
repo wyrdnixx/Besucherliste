@@ -15,7 +15,7 @@ func TestUpdate(t *testing.T) {
 
 	var updVisitor models.ReqUpdVisitor
 
-	updVisitor.ID = "58"
+	updVisitor.ID = "5"
 	updVisitor.Surname = "UpdatedHans"
 	updVisitor.Givenname = "UpdatedEberdinger"
 	updVisitor.Birthd = "1999-12-01"
@@ -26,7 +26,7 @@ func TestUpdate(t *testing.T) {
 
 	var r, err = modules.UpdateVisitor(updVisitor)
 
-	fmt.Printf("res %vn", r)
+	fmt.Printf("res %v\n", r)
 	if err != nil {
 		t.Errorf("tot != 1")
 	}

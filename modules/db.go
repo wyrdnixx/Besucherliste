@@ -59,17 +59,27 @@ func UpdateVisitor(m models.ReqUpdVisitor) (int, error) {
 		return -1, err
 		//log.Fatal(err2)
 	}
-	fmt.Printf("Udpate Result: %v", result)
 
-	if id, err := strconv.Atoi(m.ID); err == nil {
-		return id, nil
+	count, _ := result.RowsAffected()
+	id, _ := strconv.Atoi(m.ID)
 
+	if count != 1 {
+
+		return -1, fmt.Errorf("Error updating visitor id %v returned no result\n", id)
 	} else {
-		fmt.Println(m.ID, "is not an integer.")
-		return -1, nil
-
+		return id, nil
 	}
 
+	/*
+		if id, err := strconv.Atoi(m.ID); err == nil {
+			return id, nil
+
+		} else {
+			fmt.Println(m.ID, "is not an integer.")
+			return -1, nil
+
+		}
+	*/
 }
 
 func GetVisitorById(_i int) (models.Visitor, error) {
