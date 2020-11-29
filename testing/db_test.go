@@ -1,8 +1,6 @@
 package testing
 
 import (
-	"encoding/json"
-	"fmt"
 	"testing"
 
 	"github.com/wyrdnixx/Besucherliste/models"
@@ -13,21 +11,30 @@ func TestUpdate(t *testing.T) {
 
 	modules.ReadConfig()
 
-	var updVisitor models.ReqUpdVisitor
+	var updVisitorOK models.ReqUpdVisitor
+	updVisitorOK.ID = "58"
+	updVisitorOK.Surname = "UpdatedHans"
+	updVisitorOK.Givenname = "UpdatedEberdinger"
+	updVisitorOK.Birthd = "1999-12-01"
 
-	updVisitor.ID = "5"
-	updVisitor.Surname = "UpdatedHans"
-	updVisitor.Givenname = "UpdatedEberdinger"
-	updVisitor.Birthd = "1999-12-01"
+	var updVisitorFail models.ReqUpdVisitor
+	updVisitorFail.ID = "-1"
+	updVisitorFail.Surname = "UpdatedHans"
+	updVisitorFail.Givenname = "UpdatedEberdinger"
+	updVisitorFail.Birthd = "2001-12-01"
 
-	teststring, _ := json.Marshal(updVisitor)
+	//okVisitor, _ := json.Marshal(updVisitorOK)
+	//failVisitor, _ := json.Marshal(updVisitorFail)
+	//fmt.Printf(string(teststring))
 
-	fmt.Printf(string(teststring))
+	var _, errOk = modules.UpdateVisitor(updVisitorOK)
+	var _, errFail = modules.UpdateVisitor(updVisitorFail)
 
-	var r, err = modules.UpdateVisitor(updVisitor)
-
-	fmt.Printf("res %v\n", r)
-	if err != nil {
-		t.Errorf("tot != 1")
+	if errOk != nil {
+		t.Errorf("Test-Error: %v", errOk.Error())
 	}
+	if errFail == nil {
+		t.Errorf("Error-Visitor returned other nil - should have been error: \n")
+	}
+
 }

@@ -2,6 +2,7 @@ package modules
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"strconv"
@@ -63,9 +64,11 @@ func UpdateVisitor(m models.ReqUpdVisitor) (int, error) {
 	count, _ := result.RowsAffected()
 	id, _ := strconv.Atoi(m.ID)
 
+	fmt.Printf("Update returned count: %v\n", count)
+
 	if count != 1 {
 
-		return -1, fmt.Errorf("Error updating visitor id %v returned no result\n", id)
+		return -1, errors.New("Error updating visitor returned no result\n")
 	} else {
 		return id, nil
 	}
