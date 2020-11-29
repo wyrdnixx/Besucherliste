@@ -30,7 +30,12 @@ func ReadConfig() {
 
 	err := gonfig.GetConf("./config.development.json", &AppConfig)
 	if err != nil {
-		fmt.Println("ERROR: Config konnte nicht geladen werden: ", err.Error())
+		fmt.Printf("ERROR: Could not read config: %v\n ", err.Error())
+		fmt.Printf("Trying second file location\n")
+		err2 := gonfig.GetConf("../config.development.json", &AppConfig)
+		if err2 != nil {
+			fmt.Printf("ERROR: Config second location also failed: %v\n ", err.Error())
+		}
 	}
 
 	fmt.Println("Info: DBHost: ", AppConfig.DBHost)
