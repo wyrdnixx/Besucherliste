@@ -52,6 +52,9 @@
         <input id="msgUPD" type="text"/>
         <button onclick="send(2)">Send</button>
         <br>
+        <input id="msgDEL" type="text"/>
+        <button onclick="send(3)">Send</button>
+        <br>
     </div>
 
     <div id="updatedata"    class="updatedata">
@@ -71,6 +74,7 @@
     var inputMsgOK = document.getElementById("msgOK");
     var inputMsgER = document.getElementById("msgER");
     var inputMsgUPD = document.getElementById("msgUPD");
+    var inputMsgDEL = document.getElementById("msgDEL");
     var output = document.getElementById("output");
     var info = document.getElementById("connState")
 
@@ -104,6 +108,8 @@
             "Birthd":"1990-12-01"
         }
         }
+
+
 
         inputMsgOK.value = JSON.stringify(newVisitorObject);
         inputMsgER.value = JSON.stringify(ErrObject);
@@ -170,7 +176,16 @@
         } else if (_msg == 2) {
             toSend =  inputMsgUPD.value
             
-        }     
+        }  else if (_msg == 3) {
+            var deleteVisitorObject = {
+            "type":"DeleteVisitor",
+            "data":{
+                "id": ""
+                }
+            }
+            deleteVisitorObject.data.id = inputMsgDEL.value;
+            toSend = JSON.stringify(deleteVisitorObject)
+        }
         socket.send(toSend);             
         output.innerHTML += "send object: " + toSend + "\n";
         
@@ -189,6 +204,7 @@
         output.innerHTML+="Requested AllVisitors update: " + updateRequest + "\n"
 
     }
+
 
 start()
 </script>

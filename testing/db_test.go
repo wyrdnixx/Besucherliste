@@ -7,9 +7,29 @@ import (
 	"github.com/wyrdnixx/Besucherliste/modules"
 )
 
-func TestUpdate(t *testing.T) {
-
+func init() {
 	modules.ReadConfig()
+
+}
+
+func TestCreate(t *testing.T) {
+	var insVisitorOK models.ReqNewVisitor
+	insVisitorOK.Surname = "InsertedHans"
+	insVisitorOK.Givenname = "InsertedMueller"
+	insVisitorOK.Birthd = "2001-12-01"
+	var _, errIns = modules.InsertVisitor(insVisitorOK)
+
+	if errIns != nil {
+		t.Errorf("Error on insert new visitor: %v \n", errIns.Error())
+	}
+}
+
+func TestFailedTest(t *testing.T) {
+	//var i = 2
+	//t.Errorf("Test-Testerror: %v", i)
+
+}
+func TestUpdate(t *testing.T) {
 
 	var updVisitorOK models.ReqUpdVisitor
 	updVisitorOK.ID = "58"
@@ -23,7 +43,7 @@ func TestUpdate(t *testing.T) {
 	updVisitorFail.Givenname = "UpdatedEberdinger"
 	updVisitorFail.Birthd = "2001-12-01"
 
-	//okVisitor, _ := json.Marshal(updVisitorOK)
+	//okVisitor, _ := json.Mar´shal(updVisitorOK)
 	//failVisitor, _ := json.Marshal(updVisitorFail)
 	//fmt.Printf(string(teststring))
 
@@ -37,4 +57,13 @@ func TestUpdate(t *testing.T) {
 		t.Errorf("Error-Visitor returned other nil - should have been error: \n")
 	}
 
+}
+
+func TestDelete(t *testing.T) {
+
+	var errIns = modules.DeleteVisitor(2)
+
+	if errIns != nil {
+		t.Errorf("Error on delete new visitor: %v \n", errIns.Error())
+	}
 }

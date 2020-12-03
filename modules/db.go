@@ -12,8 +12,8 @@ import (
 )
 
 func InsertVisitor(m models.ReqNewVisitor) (int, error) {
-	fmt.Printf("InsertVisitor")
-	fmt.Printf("Database Connection parameters: %s \n", models.DBInfo)
+	//	fmt.Printf("InsertVisitor")
+	//	fmt.Printf("Database Connection parameters: %s \n", models.DBInfo)
 
 	db, err := sql.Open("mysql", models.DBInfo)
 
@@ -31,16 +31,36 @@ func InsertVisitor(m models.ReqNewVisitor) (int, error) {
 		return -1, err
 		//log.Fatal(err2)
 	}
-	fmt.Printf("Insert sucessfully id: %s \n", result)
+	//	fmt.Printf("Insert sucessfully id: %s \n", result)
 	x, _ := result.LastInsertId()
 	id := int(x)
-	fmt.Printf("Insert sucessfully id: %v \n", id)
+	//	fmt.Printf("Insert sucessfully id: %v \n", id)
 	return id, nil
 }
 
+func DeleteVisitor(vID int) error {
+	db, err := sql.Open("mysql", models.DBInfo)
+	defer db.Close()
+	if err != nil {
+		return err
+	}
+
+	//id, _ := strconv.Itoa(vID)
+
+	var sql = "DELETE FROM `mydb`.`visitors` where id = " + strconv.Itoa(vID) + ";"
+	_, errDB := db.Exec(sql)
+
+	if errDB != nil {
+		return errDB
+	} else {
+		return nil
+	}
+
+}
+
 func UpdateVisitor(m models.ReqUpdVisitor) (int, error) {
-	fmt.Printf("UpdateVisitor")
-	fmt.Printf("Database Connection parameters: %s \n", models.DBInfo)
+	//	fmt.Printf("UpdateVisitor")
+	//	fmt.Printf("Database Connection parameters: %s \n", models.DBInfo)
 
 	db, err := sql.Open("mysql", models.DBInfo)
 
@@ -50,7 +70,7 @@ func UpdateVisitor(m models.ReqUpdVisitor) (int, error) {
 	}
 
 	var sql = "UPDATE `mydb`.`visitors` SET `Surname` = '" + m.Surname + "', `Givenname` = '" + m.Givenname + "', `Birthd` = '" + m.Birthd + "', `chd`= NOW() WHERE (`id` = '" + m.ID + "');"
-	fmt.Printf("SQL: %s \n", sql)
+	//	fmt.Printf("SQL: %s \n", sql)
 
 	//result, err := db.Query(sql)
 	result, err := db.Exec(sql)
@@ -64,7 +84,7 @@ func UpdateVisitor(m models.ReqUpdVisitor) (int, error) {
 	count, _ := result.RowsAffected()
 	id, _ := strconv.Atoi(m.ID)
 
-	fmt.Printf("Update returned count: %v\n", count)
+	//	fmt.Printf("Update returned count: %v\n", count)
 
 	if count != 1 {
 
@@ -97,11 +117,11 @@ func GetVisitorById(_i int) (models.Visitor, error) {
 	i := strconv.Itoa(_i)
 
 	var sql = "select * from mydb.visitors where id = " + i + ";"
-	fmt.Printf("SQL: %s \n", sql)
+	//fmt.Printf("SQL: %s \n", sql)
 	result, err := db.Query(sql)
 
 	if err != nil {
-		fmt.Printf("Error-Mysql: %s\n", err)
+		//	fmt.Printf("Error-Mysql: %s\n", err)
 		return v, err
 	}
 	for result.Next() {
@@ -124,7 +144,7 @@ func GetAllVisitors() (models.AllVisitors, error) {
 	db, err := sql.Open("mysql", models.DBInfo)
 	var allVisitors models.AllVisitors
 
-	fmt.Printf("AllV: %v \n", allVisitors)
+	//fmt.Printf("AllV: %v \n", allVisitors)
 
 	defer db.Close()
 	if err != nil {
@@ -132,7 +152,7 @@ func GetAllVisitors() (models.AllVisitors, error) {
 	}
 
 	var sql = "select * from mydb.visitors ;"
-	fmt.Printf("SQL: %s \n", sql)
+	//fmt.Printf("SQL: %s \n", sql)
 	result, err := db.Query(sql)
 
 	if err != nil {

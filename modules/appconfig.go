@@ -38,10 +38,10 @@ func ReadConfig() {
 		}
 	}
 
-	fmt.Println("Info: DBHost: ", AppConfig.DBHost)
-	fmt.Println("Info: DBPort: ", AppConfig.DBPort)
+	//fmt.Println("Info: DBHost: ", AppConfig.DBHost)
+	//fmt.Println("Info: DBPort: ", AppConfig.DBPort)
 
 	models.DBInfo = AppConfig.DBUser + ":" + AppConfig.DBPassword + "@tcp(" + AppConfig.DBHost + ":" + AppConfig.DBPort + ")/" + AppConfig.DBName
 	//DBInfo := AppConfig.DBUser + ":" + AppConfig.DBPassword + "@tcp(" + AppConfig.DBHost + ":" + AppConfig.DBPort + ")/" + AppConfig.DBName
-	fmt.Printf("got DBInfo: %s", models.DBInfo)
+	//fmt.Printf("got DBInfo: %s", models.DBInfo)
 }

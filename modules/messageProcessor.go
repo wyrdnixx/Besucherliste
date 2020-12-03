@@ -3,6 +3,7 @@ package modules
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	"github.com/wyrdnixx/Besucherliste/models"
 )
@@ -51,6 +52,35 @@ func ConsumeMessage(_inbound transmitter) models.ResultMessage {
 			result.Type = "UpdateAllVisitors"
 			nfo, _ := json.Marshal(res.Visitors)
 			result.Info = string(nfo)
+
+			////////////////////
+			/// not correct parsing  json - ID
+		case "DeleteVisitor":
+			type delVisitor struct {
+				id int
+			}
+			var dv delVisitor
+
+			// convert back to []byte
+			x, _ := json.Marshal(m.Data)
+			// unmarshal to type struct
+			errJSON := json.Unmarshal(x, &dv)
+			fmt.Printf("id: %v", dv)
+
+			if errJSON != nil {
+				errDEL := DeleteVisitor(dv.id)
+				if errDEL != nil {
+					result.Type = "Error"
+					result.Info = "Error deleting: " + errDEL.Error()
+				} else {
+					result.Type = "Success"
+					fmt.Printf("deleted id : %v\n", dv.id)
+					result.Info = "Deleted: " + strconv.Itoa(dv.id)
+				}
+			} else {
+
+			}
+
 		default:
 			result.Type = "Error"
 			result.Info = "Unknown Message Type: " + m.Type
@@ -90,6 +120,7 @@ func processReqNewVisitor(_m interface{}, _inboud transmitter) models.ResultMess
 			if err != nil {
 			} else {
 				fmt.Printf("Inserted Result: %s", v)
+				// Update all Clients
 				go bc(_inboud, v)
 			}
 
