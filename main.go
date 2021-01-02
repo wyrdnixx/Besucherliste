@@ -46,6 +46,21 @@ func main() {
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 
+		/* 		var upgrader = websocket.Upgrader{
+		   			ReadBufferSize:  1024,
+		   			WriteBufferSize: 1024,
+		   		}
+		   		upgrader.CheckOrigin = func(r *http.Request) bool { return false }
+
+		   		// upgrade this connection to a WebSocket
+		   		// connection
+		   		_, err := upgrader.Upgrade(w, r, nil)
+
+
+		   		if err != nil {
+		   			log.Println(err)
+		   		} */
+
 		modules.ServeWs(hub, w, r)
 	})
 	err := http.ListenAndServe(*addr, nil)
