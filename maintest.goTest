@@ -19,8 +19,13 @@ func main() {
 		ServeWs(w, r)
 	})
 
+	fs := http.FileServer(http.Dir("./public"))
+	http.Handle("/", fs)
+
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }
+
+//------------------
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  4096,
@@ -52,6 +57,7 @@ func ServeWs(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("New Client joined the hub!")
 	fmt.Println(client)
+	fmt.Println(client.conn.RemoteAddr())
 }
 func EnableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")

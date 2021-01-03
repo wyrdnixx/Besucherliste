@@ -20,23 +20,9 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.URL)
 
 	EnableCors(&w)
-	/*
-		if r.URL.Path != "/" {
-			http.Error(w, "Not found", http.StatusNotFound)
-			return
-		}
-		if r.Method != "GET" {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-			return
-		}
-		//http.ServeFile(w, r, "websockets.html")
 
-	*/
-	//	w.Header().Set("contend-type", "application/javasript")
-
-	log.Println("client: " + w.Header().Get("Access-Control-Allow-Origin"))
-
-	http.ServeFile(w, r, "client/index.html")
+	/* log.Println("client: " + w.Header().Get("Access-Control-Allow-Origin"))
+	http.ServeFile(w, r, "client/index.html") */
 }
 
 var upgrader = websocket.Upgrader{
@@ -49,10 +35,10 @@ func main() {
 	flag.Parse()
 	hub := modules.NewHub()
 	go hub.Run()
-	http.HandleFunc("/", serveHome)
+	//http.HandleFunc("/", serveHome)
 
-	//fs := http.FileServer(http.Dir("client"))
-	//http.Handle("/", fs)
+	fs := http.FileServer(http.Dir("./public"))
+	http.Handle("/", fs)
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 
