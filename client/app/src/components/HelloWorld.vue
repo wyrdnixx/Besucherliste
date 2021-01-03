@@ -4,6 +4,7 @@
      <h2>Con: {{ constate }}</h2>
 <div id="example">
   <button v-on:click="greet">Greet</button>
+  <button v-on:click="connectToWebsocket">connectToWebsocket</button>
 </div>
   </div>
 </template>
@@ -17,30 +18,33 @@ export default {
   },
   data() {
    return {
-       constate: "",       
+      constate: "", 
+      ws: null,
+      serverUrl: "ws://localhost:8080/ws"      
    }
   },
  
     methods: {
        //greet: function (event) {
        greet: function () {
-      // `this` inside methods point to the Vue instance
-      //alert('Hello ' + this.name + '!')
-      // `event` is the native DOM event
-     /*  alert(event.target.tagName)
- */
-         var websocketServerLocation = "ws://" + window.location.hostname + ":8080/ws";
+          var websocketServerLocation = "ws://" + window.location.hostname + ":8080/ws";
 
-
+    //  var websocketServerLocation = "ws://localhost:8080/ws";
    
         var socket = null;
         socket = new WebSocket(websocketServerLocation)
         socket.OPEN;
     //alert('Socket ' + socket.readyState + '!')
         this.constate = socket.readyState;
-    }
+    },
     
-  
+    connectToWebsocket() {
+        this.ws = new WebSocket( this.serverUrl );
+        this.ws.addEventListener('open', (event) => { this.onWebsocketOpen(event) });
+      },
+      onWebsocketOpen() {
+        console.log("connected to WS!");
+      }
     }
 }
 
