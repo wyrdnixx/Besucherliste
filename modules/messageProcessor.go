@@ -47,11 +47,15 @@ func ConsumeMessage(_inbound transmitter) models.ResultMessage {
 			res, err := GetAllVisitors()
 			if err != nil {
 				fmt.Printf("Error getting AllVisitors:  %v \n ", err.Error())
+				result.Type = "Error"
+				result.Info = err.Error()
+			} else {
+				fmt.Printf("all visitors: %v\n", res)
+				result.Type = "UpdateAllVisitors"
+				nfo, _ := json.Marshal(res.Visitors)
+				result.Info = string(nfo)
+
 			}
-			fmt.Printf("all visitors: %v\n", res)
-			result.Type = "UpdateAllVisitors"
-			nfo, _ := json.Marshal(res.Visitors)
-			result.Info = string(nfo)
 
 			////////////////////
 			/// not correct parsing  json - ID

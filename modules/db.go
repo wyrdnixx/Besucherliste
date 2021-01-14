@@ -164,7 +164,7 @@ func GetAllVisitors() (models.AllVisitors, error) {
 		err = result.Scan(&v.ID, &v.Surname, &v.Givenname, &v.Birthd, &v.Chd)
 		if err != nil {
 			fmt.Printf("Error getting visitor: %s \n", err.Error())
-
+			return allVisitors, err
 		} else {
 			//fmt.Printf("Found visitor: %v:%s \n", v.ID, v.Surname)
 			allVisitors.Visitors = append(allVisitors.Visitors, v)
